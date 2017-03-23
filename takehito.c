@@ -18,25 +18,21 @@ PD7
 PD6
 PD5
 PB7
-
 PB6
 PD4
 PD3
 PD2
 PB1
-
 PB2
 PB3
 PB4
 PB5
 PC5
-
 PC0
 PC1
 PC2
 PC3
 PC4
-
 */
 
 #define F_CPU 1000000UL 
@@ -100,7 +96,7 @@ PC4
 // strings stored in flash
 const char str_0[] PROGMEM = "DAT BAT";
 const char str_1[] PROGMEM = "ILPALAZZO";
-const char str_2[] PROGMEM = "HARUHI'S MOM";
+const char str_2[] PROGMEM = "HARUHI'S \"MOM\"";
 const char str_3[] PROGMEM = "OLIVIER";
 const char str_4[] PROGMEM = "ZECHS";     
 const char str_5[] PROGMEM = "THE FOOL";
@@ -287,7 +283,6 @@ void enable_all_rows() {
 	PORTB = 0xff;
 	PORTC = 0x3f;
 	PORTD = 0xfc;
-
 	//disable all cols
 	COL0_PORT &= ~COL0_BIT;
 	COL1_PORT &= ~COL1_BIT;
@@ -300,12 +295,10 @@ void enable_all_rows() {
 	COL8_PORT &= ~COL8_BIT;
 	COL9_PORT &= ~COL9_BIT;
 }
-
 void enable_all_cols() {
 	PORTB = 0xff;
 	PORTC = 0x3f;
 	PORTD = 0xfc;
-
 	//disable all rows
 	ROW0_PORT &= ~ROW0_BIT;
 	ROW1_PORT &= ~ROW1_BIT;
@@ -462,6 +455,7 @@ void scroll_text(const char *text, int speed) {
 
 // this is where magic happens
 void magic(char ch1, char ch2, int p9) {
+	// TODO this could use only one buffer, 150 more bytes for our evil deeds
 	char kala[150] = "";
 	char k[] = "@@@@@";
 	if (p9) {
@@ -474,7 +468,7 @@ void magic(char ch1, char ch2, int p9) {
 	strcat(kala, PSTR("   KALA  "));
 	get_str((turska % 5) + 22);
 	strcat(kala, buffer);
-	scroll_text(kala, 95);
+	scroll_text(kala, 80);
 }
 
 
@@ -518,7 +512,7 @@ int main() {
 				
 				if (timer > 150){
 					
-					scroll_text(out, 100);
+					scroll_text(out, 80);
 					time = 0;
 					chr1 = '0';
 					//this is good. vahennetaan "kirjaimesta" at 32 ja sijoitetann siihen binaaridataa...
@@ -529,13 +523,13 @@ int main() {
 				}
 			}
 		    if (reset == 0) {
-		    	scroll_text(jee, 100);
+		    	scroll_text(jee, 80);
 				// funktion parametreina space...
-				write_scroll_character(' ', ' ', chr1, 90);
+				write_scroll_character(' ', ' ', chr1, 80);
 				if (!plus9) {
-					write_scroll_character(' ', chr1, '@', 90);
+					write_scroll_character(' ', chr1, '@', 80);
 				} else {
-					write_scroll_character(' ', chr2, chr1, 90);
+					write_scroll_character(' ', chr2, chr1, 80);
 				}			
 					
 			}
@@ -567,9 +561,10 @@ int main() {
 				
 				//86400 s = 24 h
 				if (time == 86320){
+				  //TODO set @ to 0 here? 
 					time = 0;
 					chr1++; 
-					scroll_text(jee, 100);
+					scroll_text(jee, 80);
 				}
 				if (chr1 > '9'){
 					chr1 = '0';
@@ -601,6 +596,4 @@ int main() {
 						count2 = 0;
 					}
 				}
-
-
 */
